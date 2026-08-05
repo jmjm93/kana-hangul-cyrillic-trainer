@@ -181,6 +181,55 @@ button.link.danger { color: #b06b66; }
 .cell b { font-family: var(--char-font); font-size: 22px; font-weight: normal; }
 .cell i { font-style: normal; font-size: 11px; color: var(--dim); }
 
+/* Small "?" beside a romanization, with a CSS-only tooltip on hover and keyboard focus. */
+.help {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 13px;
+  height: 13px;
+  margin-left: 4px;
+  padding: 0;
+  border: 1px solid #4d4d4d;
+  border-radius: 50%;
+  background: #2f2f2f;
+  color: var(--dim);
+  font-size: 9px;
+  line-height: 1;
+  cursor: help;
+  vertical-align: 1px;
+}
+
+.help:hover, .help:focus { background: #3d3d3d; color: var(--text); border-color: #6a6a6a; outline: none; }
+
+.help::after {
+  content: attr(data-tip);
+  position: absolute;
+  bottom: 145%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 270px;
+  padding: 9px 11px;
+  background: #131313;
+  border: 1px solid #4d4d4d;
+  border-radius: 3px;
+  color: var(--text);
+  font-size: 12px;
+  font-style: normal;
+  font-weight: normal;
+  line-height: 1.45;
+  text-align: left;
+  white-space: normal;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.12s;
+  pointer-events: none;
+  z-index: 5;
+}
+
+.help:hover::after, .help:focus::after { opacity: 1; visibility: visible; }
+
 /* Unselected rows dim to match how the grid charts show what is out of play. */
 .listrow:not(.on) .cell b { color: #565656; }
 .listrow:not(.on) .cell i { color: #4a4a4a; }

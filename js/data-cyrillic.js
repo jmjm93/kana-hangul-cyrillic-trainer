@@ -60,9 +60,19 @@
     },
     {
       id: 'g6', label: 'Signs & Ы', letters: [
-        ['Ы', 'ы', ['y', 'ih'], 'hard i, tongue pulled back'],
-        ['Ъ', 'ъ', ['hard', 'hard sign', '"', '-', "''"], 'hard sign — no sound of its own'],
-        ['Ь', 'ь', ['soft', 'soft sign', "'"], 'soft sign — palatalizes the letter before it']
+        ['Ы', 'ы', ['y', 'ih'], 'a full vowel, romanized y — был (byl) vs бил (bil)',
+          'A full vowel, not a sign: [ɨ], like i with the tongue pulled back and the lips flat. ' +
+          'Romanized y — был (byl, "was") vs бил (bil, "beat"). Й is answered y as well; the hint on a miss tells them apart.'],
+        ['Ъ', 'ъ', ['"', 'ʺ', 'hard', 'hard sign', '-', "''"],
+          'hard sign — no sound of its own; it blocks softening',
+          'The hard sign. It has no sound: it keeps a consonant separate from the vowel after it, ' +
+          'blocking softening — подъезд is podyezd, not podezd. Scholarly transliteration writes ʺ and everyday ' +
+          'transliteration drops it, so this trainer asks for " — typing hard also works.'],
+        ['Ь', 'ь', ["'", 'ʹ', 'soft', 'soft sign'],
+          'soft sign — no sound of its own; it softens the letter before it',
+          'The soft sign. It has no sound: it palatalizes the letter before it — мать (matʹ, "mother") vs мат (mat). ' +
+          'Scholarly transliteration writes ʹ and everyday transliteration an apostrophe, so this trainer asks for \' ' +
+          '— typing soft also works.']
       ]
     }
   ];
@@ -85,10 +95,10 @@
       var mode = (options && options.letterCase) || 'both';
       var out = [];
       if (mode !== 'lower') {
-        out.push({ id: 'ru:' + entry[0], char: entry[0], answers: entry[2], note: entry[3] });
+        out.push({ id: 'ru:' + entry[0], char: entry[0], answers: entry[2], note: entry[3], help: entry[4] });
       }
       if (mode !== 'upper') {
-        out.push({ id: 'ru:' + entry[1], char: entry[1], answers: entry[2], note: entry[3] });
+        out.push({ id: 'ru:' + entry[1], char: entry[1], answers: entry[2], note: entry[3], help: entry[4] });
       }
       return out;
     }

@@ -369,8 +369,15 @@
     el.settings.innerHTML = html;
   }
 
+  // Quotes are escaped too: this output is used inside attribute values, and some answers and
+  // tooltips are literally quote characters.
   function escapeHtml(text) {
-    return String(text).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    return String(text)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
   }
 
   function renderCharts() {
@@ -389,7 +396,12 @@
             var char = chart.cellChar ? chart.cellChar(entry, opts) : entry;
             var items = chart.itemsFor(entry, opts);
             var rom = items.length ? items[0].answers[0] : '';
-            return '<span class="cell"><b>' + escapeHtml(char) + '</b><i>' + escapeHtml(rom || '—') + '</i></span>';
+            var help = items.length && items[0].help
+              ? '<button type="button" class="help" data-tip="' + escapeHtml(items[0].help) +
+                '" aria-label="' + escapeHtml(items[0].help) + '">?</button>'
+              : '';
+            return '<span class="cell"><b>' + escapeHtml(char) + '</b><i>' +
+              escapeHtml(rom || '—') + help + '</i></span>';
           }).join('');
           return '<div class="listrow' + (on ? ' on' : '') + '">' +
             '<label class="rowlabel"><input type="checkbox" data-chart="' + chart.id +

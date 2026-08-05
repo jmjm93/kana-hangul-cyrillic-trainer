@@ -140,7 +140,8 @@ function answersFor(deck, char) {
   check('hangul ' + t[0] + ' primary', answers && answers[0] === t[1],
     answers ? 'got ' + answers[0] + ' want ' + t[1] : 'missing from deck');
 });
-[['А', 'a'], ['ж', 'zh'], ['щ', 'shch'], ['Э', 'e'], ['ю', 'yu'], ['ь', 'soft']].forEach(function (t) {
+[['А', 'a'], ['ж', 'zh'], ['щ', 'shch'], ['Э', 'e'], ['ю', 'yu'], ['ь', "'"], ['ъ', '"'],
+  ['ы', 'y']].forEach(function (t) {
   var answers = answersFor(cDeck, t[0]);
   check('cyrillic ' + t[0] + ' primary', answers && answers[0] === t[1],
     answers ? 'got ' + answers[0] + ' want ' + t[1] : 'missing from deck');

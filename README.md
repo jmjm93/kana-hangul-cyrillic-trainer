@@ -11,3 +11,5 @@ Also added Hangul for Korean and Russian Cyrillic because why not.
 Just open `index.html` with any browser.
 
 Progress, selection and settings are kept in `localStorage` so anything that might block or impede that will affect stats.
+
+You can also see it https://jmjm93.github.io/kana-hangul-cyrillic-trainer/
