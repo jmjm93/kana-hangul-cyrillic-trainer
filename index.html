@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hangul &amp; Cyrillic Trainer</title>
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+<main>
+  <header class="head">
+    <h1 id="title">hangul</h1>
+    <nav class="tabs" id="tabs"></nav>
+  </header>
+
+  <hr>
+
+  <section class="card">
+    <div class="prompt" id="prompt">&nbsp;</div>
+    <form id="answer-form" autocomplete="off">
+      <input id="answer" type="text" autocomplete="off" autocorrect="off"
+             autocapitalize="off" spellcheck="false" aria-label="romanization">
+    </form>
+    <div class="reveal" id="reveal">&nbsp;</div>
+    <div class="meta">
+      <span id="score">0/0</span>
+      <span class="sep" aria-hidden="true">·</span>
+      <span id="accuracy">100%</span>
+      <span class="sep" aria-hidden="true">·</span>
+      <span id="streak">streak 0</span>
+      <span class="sep" aria-hidden="true">·</span>
+      <span id="pool">0 characters</span>
+    </div>
+  </section>
+
+  <hr>
+
+  <div class="toggle-row">
+    <button type="button" id="toggle-options">show/hide options</button>
+  </div>
+
+  <section id="options" class="options" hidden>
+    <div class="block">
+      <h2>Levels</h2>
+      <p class="hint">Start small and add a level when you are hitting it reliably.</p>
+      <div class="presets" id="presets"></div>
+    </div>
+    <div class="block">
+      <h2>Settings</h2>
+      <div class="settings" id="settings"></div>
+    </div>
+    <div id="charts"></div>
+    <div class="block">
+      <h2>Weak spots</h2>
+      <div id="weak" class="weak">Nothing tracked yet.</div>
+      <button type="button" class="link danger" id="reset-stats">reset stats for this alphabet</button>
+    </div>
+  </section>
+
+  <footer>
+    <span>enter — check answer &nbsp;·&nbsp; enter again — next &nbsp;·&nbsp; esc — clear</span>
+  </footer>
+</main>
+
+<script src="js/data-hangul.js"></script>
+<script src="js/data-cyrillic.js"></script>
+<script src="js/data-kana.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

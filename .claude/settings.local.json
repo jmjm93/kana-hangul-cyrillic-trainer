@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(node tools/check-data.js)",
+      "Bash(npm init *)",
+      "Bash(npm install *)",
+      "Bash(node -e \"const p=require\\('C:/Users/jmjm/AppData/Local/Temp/claude/d--code-hangul-recog-trainer/9d02f677-a2ba-437c-b3ff-f5514ea14733/scratchpad/node_modules/playwright-core'\\); console.log\\('playwright-core ok'\\);\")",
+      "Bash(node smoke.js)",
+      "Bash(sort -k1 -n -r)",
+      "Bash(node -e ' *)",
+      "Bash(git fetch *)",
+      "Bash(git ls-remote *)",
+      "Bash(git config *)"
+    ]
+  }
+}

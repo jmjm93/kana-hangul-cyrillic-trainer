@@ -1,0 +1,238 @@
+/* Minimal dark sheet, deliberately close to the kana trainer it is modelled on. */
+:root {
+  --bg: #1b1b1b;
+  --card: #262626;
+  --line: #3a3a3a;
+  --text: #d8d8d8;
+  --dim: #8a8a8a;
+  --bad: #e2544a;
+  --ok: #5fb56a;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  padding: 24px 16px 40px;
+  background: var(--bg);
+  color: var(--text);
+  font: 15px/1.5 "Segoe UI", Helvetica, Arial, sans-serif;
+  --char-font: sans-serif;
+}
+
+main { max-width: 940px; margin: 0 auto; }
+
+hr {
+  border: 0;
+  border-top: 1px dashed var(--line);
+  margin: 18px 0;
+}
+
+.head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+h1 {
+  margin: 0;
+  font-size: 30px;
+  letter-spacing: -0.5px;
+}
+
+h2 {
+  margin: 0 0 4px;
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--dim);
+}
+
+button {
+  font: inherit;
+  color: var(--text);
+  background: #2f2f2f;
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  padding: 6px 12px;
+  cursor: pointer;
+}
+
+button:hover { background: #3a3a3a; }
+button.on { background: #4a4a4a; border-color: #666; color: #fff; }
+
+button.link {
+  background: none;
+  border: 0;
+  padding: 0;
+  color: #7aa7d8;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+button.link:hover { background: none; color: #9dc3ea; }
+button.link.danger { color: #b06b66; }
+
+.tabs { display: flex; gap: 8px; }
+
+/* --- game card --- */
+.card {
+  background: var(--card);
+  padding: 28px 20px 18px;
+  text-align: center;
+}
+
+.prompt {
+  font-family: var(--char-font);
+  font-size: 92px;
+  line-height: 1.15;
+  min-height: 108px;
+  color: #eaeaea;
+  transition: color 0.12s;
+  user-select: none;
+}
+
+.prompt.empty { color: var(--dim); font-size: 48px; }
+.prompt.bad { color: var(--bad); }
+
+#answer {
+  width: 100%;
+  max-width: 520px;
+  margin: 6px auto 0;
+  display: block;
+  padding: 8px 10px;
+  font: 18px/1.4 inherit;
+  text-align: center;
+  color: #fff;
+  background: transparent;
+  border: 2px solid #cfcfcf;
+  border-radius: 3px;
+}
+
+#answer:focus { outline: none; border-color: #fff; }
+#answer.ok, #answer.ok:focus { border-color: var(--ok); }
+#answer::placeholder { color: #6e6e6e; font-size: 15px; }
+#answer:disabled { border-color: var(--line); }
+
+.reveal {
+  margin-top: 10px;
+  min-height: 22px;
+  font-size: 15px;
+  color: var(--bad);
+}
+
+.meta {
+  margin-top: 22px;
+  font-size: 13px;
+  color: var(--dim);
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.toggle-row { text-align: center; }
+
+/* --- options --- */
+.options { margin-top: 18px; }
+.block { margin: 0 0 26px; }
+
+.hint { margin: 0 0 10px; font-size: 13px; color: var(--dim); }
+
+.presets { display: flex; flex-wrap: wrap; gap: 8px; }
+
+.settings { display: flex; flex-direction: column; gap: 6px; font-size: 14px; }
+.settings label { cursor: pointer; }
+.settings input { margin-right: 6px; vertical-align: -1px; }
+.radios { display: flex; gap: 14px; color: var(--dim); }
+.radios label { color: var(--text); }
+
+/* --- list chart --- */
+.listchart { display: flex; flex-direction: column; gap: 2px; }
+
+.listrow {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px 14px;
+  padding: 6px 8px;
+  background: #222;
+  border-left: 3px solid transparent;
+}
+
+.listrow.on { background: var(--card); border-left-color: #7aa7d8; }
+
+.rowlabel {
+  min-width: 220px;
+  font-size: 13px;
+  color: var(--dim);
+  cursor: pointer;
+}
+
+.listrow.on .rowlabel { color: var(--text); }
+.rowlabel input { margin-right: 6px; vertical-align: -1px; }
+
+.cells { display: flex; flex-wrap: wrap; gap: 10px; }
+
+.cell { display: inline-flex; flex-direction: column; align-items: center; min-width: 34px; }
+.cell b { font-family: var(--char-font); font-size: 22px; font-weight: normal; }
+.cell i { font-style: normal; font-size: 11px; color: var(--dim); }
+
+/* Unselected rows dim to match how the grid charts show what is out of play. */
+.listrow:not(.on) .cell b { color: #565656; }
+.listrow:not(.on) .cell i { color: #4a4a4a; }
+
+/* --- grid chart --- */
+.gridwrap { overflow-x: auto; padding-bottom: 4px; }
+
+.gridchart { border-collapse: collapse; }
+
+.gridchart th,
+.gridchart td {
+  border: 1px solid #333;
+  padding: 2px;
+  text-align: center;
+  min-width: 40px;
+}
+
+.gridchart th { background: #222; color: var(--dim); font-weight: normal; }
+.gridchart th.on { background: #303030; color: var(--text); }
+.gridchart th.corner { border: 0; background: none; }
+.gridchart th label { display: block; cursor: pointer; padding: 3px 4px; }
+.gridchart th span { display: block; font-family: var(--char-font); font-size: 17px; }
+.gridchart th.rowhead label { display: flex; align-items: center; gap: 5px; justify-content: flex-start; }
+
+.gridchart td {
+  color: #4e4e4e;
+  padding: 3px 4px;
+  line-height: 1.1;
+}
+
+.gridchart td b { font-family: var(--char-font); font-size: 19px; font-weight: normal; display: block; }
+.gridchart td i { font-style: normal; font-size: 10px; }
+.gridchart td.on { background: var(--card); color: var(--text); }
+.gridchart td.on i { color: var(--dim); }
+.gridchart td.gap { background: #1f1f1f; }
+
+/* --- weak spots --- */
+.weak { display: flex; flex-wrap: wrap; gap: 10px; font-size: 13px; color: var(--dim); margin-bottom: 10px; }
+.weakcell { display: inline-flex; flex-direction: column; align-items: center; min-width: 34px; }
+.weakcell b { font-family: var(--char-font); font-size: 22px; font-weight: normal; color: var(--bad); }
+.weakcell i { font-style: normal; font-size: 11px; }
+
+footer {
+  margin-top: 30px;
+  padding-top: 14px;
+  border-top: 1px dashed var(--line);
+  font-size: 12px;
+  color: #6a6a6a;
+  text-align: center;
+}
+
+@media (max-width: 640px) {
+  .prompt { font-size: 68px; min-height: 84px; }
+  .rowlabel { min-width: 100%; }
+}
