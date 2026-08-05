@@ -10,7 +10,10 @@
       "Bash(node -e ' *)",
       "Bash(git fetch *)",
       "Bash(git ls-remote *)",
-      "Bash(git config *)"
+      "Bash(git config *)",
+      "Bash(gh --version)",
+      "Bash(gh auth *)",
+      "Read(//c/Users/jmjm/.ssh/**)"
     ]
   }
 }

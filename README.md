@@ -9,6 +9,6 @@ Three alphabets, switched with the tabs at the top right: **Hangul** (한글), *
 
 ## Running it
 
-Open `index.html` with any browser. You might serve it if you have somewhere.
+Just open `index.html` with any browser.
 
 Progress, selection and settings are kept in `localStorage` so anything that might block or impede that will affect stats.
