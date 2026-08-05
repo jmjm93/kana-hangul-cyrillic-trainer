@@ -1,9 +1,8 @@
 # Hangul, Cyrillic & Kana recognition trainer
 
-A character-recognition drill in the mould of the [itazuraneko kana trainer](https://itazuraneko.neocities.org/learn/kana.html):
+A character-recognition drill in the mould of the old itazuraneko kana trainer.
 
-Three alphabets, switched with the tabs at the top right: **Hangul** (한글), **Russian Cyrillic**, and
-**Kana** (かな)
+Also added Hangul for Korean and Russian Cyrillic because why not.
 
 ![The kana tab, with the selection charts open below the game](docs/screenshot.png)
 
