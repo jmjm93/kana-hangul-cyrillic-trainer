@@ -7,9 +7,10 @@
   var ALPHABETS = {
     hangul: window.ALPHABET_HANGUL,
     cyrillic: window.ALPHABET_CYRILLIC,
-    kana: window.ALPHABET_KANA
+    kana: window.ALPHABET_KANA,
+    hanzi: window.ALPHABET_HANZI
   };
-  var ORDER = ['hangul', 'cyrillic', 'kana'];
+  var ORDER = ['hangul', 'cyrillic', 'kana', 'hanzi'];
   var STORE_KEY = 'hcr-trainer-v1';
 
   var el = {
@@ -37,7 +38,7 @@
   function freshProgress(alphabet) {
     return {
       selection: clone(alphabet.defaultSelection),
-      options: { autoSubmit: true, drill: true, letterCase: 'both' },
+      options: { autoSubmit: true, drill: true, letterCase: 'both', pinyinAccurate: false },
       stats: { correct: 0, total: 0, best: 0 },
       items: {}
     };
@@ -237,22 +238,28 @@
   }
 
   function accepts(item, text) {
-    var typed = normalize(text);
+    var typed = normalizeAnswer(text);
     if (!typed) return false;
     for (var i = 0; i < item.answers.length; i++) {
-      if (normalize(item.answers[i]) === typed) return true;
+      if (normalizeAnswer(item.answers[i]) === typed) return true;
     }
     return false;
   }
 
   // True when no accepted answer continues past what was typed, so it is safe to submit.
   function isComplete(item, text) {
-    var typed = normalize(text);
+    var typed = normalizeAnswer(text);
     for (var i = 0; i < item.answers.length; i++) {
-      var answer = normalize(item.answers[i]);
+      var answer = normalizeAnswer(item.answers[i]);
       if (answer !== typed && answer.indexOf(typed) === 0) return false;
     }
     return true;
+  }
+
+  function normalizeAnswer(text) {
+    return alphabet().normalizeAnswer
+      ? alphabet().normalizeAnswer(text, options().pinyinAccurate)
+      : normalize(text);
   }
 
   function itemStats(id) {
@@ -317,6 +324,9 @@
     document.body.style.setProperty('--char-font', a.fontStack);
     el.title.textContent = a.label.toLowerCase();
     el.answer.placeholder = a.inputHint;
+    if (state.current === 'hanzi') {
+      el.answer.placeholder = p.options.pinyinAccurate ? 'pinyin with tones: nǐ or ni3' : 'pinyin: ni (ü = v or u:)';
+    }
 
     el.prompt.textContent = run.item ? run.item.char : '—';
     el.prompt.classList.toggle('empty', !run.item);
@@ -365,6 +375,13 @@
           return '<label><input type="radio" name="letterCase" data-case="' + mode + '"' +
             (opts.letterCase === mode ? ' checked' : '') + '> ' + mode + '</label>';
         }).join('') + '</div>';
+    }
+    if ((alphabet().options || []).indexOf('pinyinAccurate') !== -1) {
+      html += '<label><input type="checkbox" data-option="pinyinAccurate"' + (opts.pinyinAccurate ? ' checked' : '') + '>' +
+        ' pinyin accurate — require correct tones</label>' +
+        '<p class="hint">Use tone marks (nǐ) or numbers (ni3). Neutral tone: no mark, 0 or 5. ' +
+        'With accuracy off, tones are ignored. Type ü as ü, v or u:; plain u stays distinct. ' +
+        'HSK 3.0 character lists; presets include all levels up to the selected level.</p>';
     }
     el.settings.innerHTML = html;
   }
@@ -474,10 +491,18 @@
     submit();
   });
 
-  el.answer.addEventListener('input', function () {
+  function autoSubmitAnswer(event) {
+    if (event && event.isComposing) return;
     if (!options().autoSubmit || !run.item || run.awaitingAck) return;
+    // Neutral syllables can prefix a numbered tone; wait for Enter so a number
+    // or a combining tone mark can still be entered without advancing early.
+    if (state.current === 'hanzi' && options().pinyinAccurate &&
+        !/[0-5]$/.test(el.answer.value.trim()) &&
+        normalizeAnswer(el.answer.value).endsWith('5')) return;
     if (accepts(run.item, el.answer.value) && isComplete(run.item, el.answer.value)) submit();
-  });
+  }
+  el.answer.addEventListener('input', autoSubmitAnswer);
+  el.answer.addEventListener('compositionend', autoSubmitAnswer);
 
   document.addEventListener('keydown', function (event) {
     if (event.key === 'Escape') {
@@ -530,6 +555,10 @@
     else return;
     save();
     if (mode) afterSelectionChange();
+    else if (option === 'pinyinAccurate') {
+      el.answer.value = '';
+      render();
+    }
   });
 
   el.charts.addEventListener('click', function (event) {
