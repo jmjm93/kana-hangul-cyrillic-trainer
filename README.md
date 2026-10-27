@@ -1,6 +1,6 @@
 # Hangul, Cyrillic, Kana & Hanzi recognition trainer
 
-A character-recognition drill in the mould of the old itazuraneko kana trainer. With Hangul, Russian Cyrillic and Simplified Hanzi.
+A character-recognition drill in the mould of the old itazuraneko kana trainer. With Hangul, Russian Cyrillic and Simplified Hanzi as well as Kana.
 
 The HSK character list comes from [elkmovie/hsk30](https://github.com/elkmovie/hsk30) (Pleco Inc., MIT; upstream notes that the list was OCR-transcribed). Pronunciations come from [mozillazg/pinyin-data](https://github.com/mozillazg/pinyin-data) (MIT). Original sources and licenses are in `tools/data`; rebuild the bundled offline data with `node tools/build-hanzi.js`.
 
