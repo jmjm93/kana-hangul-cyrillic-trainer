@@ -78,7 +78,7 @@ element('settings').handlers.change({ target: setting });
 assert(element('answer').placeholder.includes('ni3'));
 function reading() {
   var char = element('prompt').textContent;
-  return context.HSK_CHARACTERS[0].find(function (entry) { return entry[0] === char; })[1][0];
+  return context.HSK_CHARACTERS.flat().find(function (entry) { return entry[0] === char; })[1][0];
 }
 element('answer').value = reading();
 element('answer-form').handlers.submit({ preventDefault: function () {} });
@@ -110,4 +110,21 @@ assert.strictEqual(element('answer').value, '');
 element('presets').handlers.click({ target: target({ 'data-preset': 'hsk7' }) });
 assert.strictEqual(element('pool').textContent, '3000 characters');
 assert(saved.progress.hanzi);
+// Short valid readings must auto-submit even when another reading extends them.
+[['度', 'du'], ['路', 'lu']].forEach(function (pair) {
+  for (var attempts = 0; element('prompt').textContent !== pair[0] && attempts < 3000; attempts++) {
+    element('answer').value = reading();
+    element('answer-form').handlers.submit({ preventDefault: function () {} });
+  }
+  assert.strictEqual(element('prompt').textContent, pair[0]);
+  var before = element('score').textContent;
+  element('answer').value = pair[1].slice(0, 1);
+  element('answer').handlers.input({ isComposing: false });
+  assert.strictEqual(element('score').textContent, before);
+  element('answer').value = pair[1];
+  element('answer').handlers.input({ isComposing: false });
+  var expected = Number(before.split('/')[0]) + 1;
+  assert.strictEqual(element('score').textContent, expected + '/' + expected, pair[0] + ' should auto-submit');
+  assert.strictEqual(element('answer').value, '');
+});
 console.log('App checks passed: Chinese tab, tone setting, both scoring modes and HSK presets.');

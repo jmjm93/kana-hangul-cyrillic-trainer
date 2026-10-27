@@ -248,6 +248,9 @@
 
   // True when no accepted answer continues past what was typed, so it is safe to submit.
   function isComplete(item, text) {
+    // Any valid Hanzi reading is complete, even when another reading extends it
+    // (e.g. du/duo for 度 or lu/luo for 路).
+    if (state.current === 'hanzi') return true;
     var typed = normalizeAnswer(text);
     for (var i = 0; i < item.answers.length; i++) {
       var answer = normalizeAnswer(item.answers[i]);
