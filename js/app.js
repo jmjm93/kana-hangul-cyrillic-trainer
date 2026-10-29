@@ -384,7 +384,10 @@
         ' pinyin accurate — require correct tones</label>' +
         '<p class="hint">Use tone marks (nǐ) or numbers (ni3). Neutral tone: no mark, 0 or 5. ' +
         'With accuracy off, tones are ignored. Type ü as ü, v or u:; plain u stays distinct. ' +
-        'HSK 3.0 character lists; presets include all levels up to the selected level.</p>';
+        'HSK 3.0 character lists; presets include all levels up to the selected level.</p>' +
+        '<p class="hint">Place the tone number after the syllable: 1 = high and level (mā / ma1), ' +
+        '2 = rising (má / ma2), 3 = dipping then rising (mǎ / ma3), ' +
+        '4 = falling (mà / ma4).</p>';
     }
     el.settings.innerHTML = html;
   }
