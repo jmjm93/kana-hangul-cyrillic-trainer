@@ -186,6 +186,7 @@
   }
 
   function nextQuestion() {
+    cancelAutoSubmit();
     if (!run.deck.length) {
       run.item = null;
       render();
@@ -272,6 +273,7 @@
   }
 
   function submit() {
+    cancelAutoSubmit();
     if (!run.item) return;
     if (run.awaitingAck) { nextQuestion(); return; }
 
@@ -369,7 +371,7 @@
     var opts = options();
     var html = '' +
       '<label><input type="checkbox" data-option="autoSubmit"' + (opts.autoSubmit ? ' checked' : '') + '>' +
-      ' submit as soon as the answer is complete</label>' +
+      ' submit when complete, or after 1 second without typing</label>' +
       '<label><input type="checkbox" data-option="drill"' + (opts.drill ? ' checked' : '') + '>' +
       ' show missed characters again a few questions later</label>';
     if ((alphabet().options || []).indexOf('letterCase') !== -1) {
@@ -497,10 +499,23 @@
     submit();
   });
 
+  var autoSubmitTimer = null;
+
+  function cancelAutoSubmit() {
+    if (autoSubmitTimer !== null) window.clearTimeout(autoSubmitTimer);
+    autoSubmitTimer = null;
+  }
+
   function autoSubmitAnswer(event) {
+    cancelAutoSubmit();
     if (event && event.isComposing) return;
     if (!options().autoSubmit || !run.item || run.awaitingAck) return;
-    // Neutral syllables can prefix a numbered tone; wait for Enter so a number
+    if (!normalize(el.answer.value)) return;
+    autoSubmitTimer = window.setTimeout(function () {
+      autoSubmitTimer = null;
+      if (options().autoSubmit && run.item && !run.awaitingAck) submit();
+    }, 1000);
+    // Neutral syllables can prefix a numbered tone; wait for a pause so a number
     // or a combining tone mark can still be entered without advancing early.
     if (state.current === 'hanzi' && options().pinyinAccurate &&
         !/[0-5]$/.test(el.answer.value.trim()) &&
@@ -508,10 +523,12 @@
     if (accepts(run.item, el.answer.value) && isComplete(run.item, el.answer.value)) submit();
   }
   el.answer.addEventListener('input', autoSubmitAnswer);
+  el.answer.addEventListener('compositionstart', cancelAutoSubmit);
   el.answer.addEventListener('compositionend', autoSubmitAnswer);
 
   document.addEventListener('keydown', function (event) {
     if (event.key === 'Escape') {
+      cancelAutoSubmit();
       if (run.awaitingAck) nextQuestion();
       else el.answer.value = '';
       return;
@@ -559,6 +576,7 @@
     if (option) options()[option] = !!event.target.checked;
     else if (mode) options().letterCase = mode;
     else return;
+    cancelAutoSubmit();
     save();
     if (mode) afterSelectionChange();
     else if (option === 'pinyinAccurate') {
