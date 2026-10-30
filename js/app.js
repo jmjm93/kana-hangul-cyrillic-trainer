@@ -19,6 +19,8 @@
     prompt: document.getElementById('prompt'),
     form: document.getElementById('answer-form'),
     answer: document.getElementById('answer'),
+    practice: document.getElementById('practice'),
+    toneGuide: document.getElementById('tone-guide'),
     reveal: document.getElementById('reveal'),
     score: document.getElementById('score'),
     accuracy: document.getElementById('accuracy'),
@@ -38,7 +40,7 @@
   function freshProgress(alphabet) {
     return {
       selection: clone(alphabet.defaultSelection),
-      options: { autoSubmit: true, drill: true, letterCase: 'both', pinyinAccurate: false },
+      options: { autoSubmit: true, drill: true, letterCase: 'both', pinyinAccurate: false, toneGuide: true },
       stats: { correct: 0, total: 0, best: 0 },
       items: {}
     };
@@ -326,6 +328,9 @@
   function render() {
     var a = alphabet();
     var p = progress();
+    var showToneGuide = state.current === 'hanzi' && p.options.pinyinAccurate && p.options.toneGuide;
+    el.toneGuide.hidden = !showToneGuide;
+    el.practice.classList.toggle('with-tone-guide', !!showToneGuide);
     document.body.style.setProperty('--char-font', a.fontStack);
     el.title.textContent = a.label.toLowerCase();
     el.answer.placeholder = a.inputHint;
@@ -384,12 +389,11 @@
     if ((alphabet().options || []).indexOf('pinyinAccurate') !== -1) {
       html += '<label><input type="checkbox" data-option="pinyinAccurate"' + (opts.pinyinAccurate ? ' checked' : '') + '>' +
         ' pinyin accurate — require correct tones</label>' +
+        '<label><input type="checkbox" data-option="toneGuide"' + (opts.toneGuide ? ' checked' : '') +
+        (opts.pinyinAccurate ? '' : ' disabled') + '> show tone guide</label>' +
         '<p class="hint">Use tone marks (nǐ) or numbers (ni3). Neutral tone: no mark, 0 or 5. ' +
         'With accuracy off, tones are ignored. Type ü as ü, v or u:; plain u stays distinct. ' +
-        'HSK 3.0 character lists; presets include all levels up to the selected level.</p>' +
-        '<p class="hint">Place the tone number after the syllable: 1 = high and level (mā / ma1), ' +
-        '2 = rising (má / ma2), 3 = dipping then rising (mǎ / ma3), ' +
-        '4 = falling (mà / ma4).</p>';
+        'HSK 3.0 character lists; presets include all levels up to the selected level.</p>';
     }
     el.settings.innerHTML = html;
   }
@@ -509,11 +513,13 @@
   function autoSubmitAnswer(event) {
     cancelAutoSubmit();
     if (event && event.isComposing) return;
-    if (!options().autoSubmit || !run.item || run.awaitingAck) return;
+    if (!options().autoSubmit || !run.item) return;
+    if (run.awaitingAck && state.current !== 'hanzi') return;
     if (!normalize(el.answer.value)) return;
     autoSubmitTimer = window.setTimeout(function () {
       autoSubmitTimer = null;
-      if (options().autoSubmit && run.item && !run.awaitingAck) submit();
+      if (options().autoSubmit && run.item &&
+          (!run.awaitingAck || (state.current === 'hanzi' && accepts(run.item, el.answer.value)))) submit();
     }, 1000);
     // Neutral syllables can prefix a numbered tone; wait for a pause so a number
     // or a combining tone mark can still be entered without advancing early.
@@ -581,8 +587,9 @@
     if (mode) afterSelectionChange();
     else if (option === 'pinyinAccurate') {
       el.answer.value = '';
+      renderSettings();
       render();
-    }
+    } else if (option === 'toneGuide') render();
   });
 
   el.charts.addEventListener('click', function (event) {

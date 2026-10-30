@@ -95,6 +95,18 @@ button.link.danger { color: #b06b66; }
   user-select: none;
 }
 
+.practice.with-tone-guide {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 24px;
+}
+.question { min-width: 0; }
+.tone-guide { text-align: left; font-size: 13px; }
+.tone-guide ul { margin: 6px 0 0; padding-left: 18px; }
+.tone-guide li { margin: 3px 0; }
+.tone-guide b { font-weight: 600; }
+
 .prompt.empty { color: var(--dim); font-size: 48px; }
 .prompt.bad { color: var(--bad); }
 
@@ -146,6 +158,7 @@ button.link.danger { color: #b06b66; }
 
 .settings { display: flex; flex-direction: column; gap: 6px; font-size: 14px; }
 .settings label { cursor: pointer; }
+.settings label:has(input:disabled) { color: var(--dim); cursor: default; }
 .settings input { margin-right: 6px; vertical-align: -1px; }
 .radios { display: flex; gap: 14px; color: var(--dim); }
 .radios label { color: var(--text); }
@@ -282,6 +295,8 @@ footer {
 }
 
 @media (max-width: 640px) {
+  .practice.with-tone-guide { gap: 12px; }
+  .tone-guide { max-width: 175px; font-size: 12px; }
   .prompt { font-size: 68px; min-height: 84px; }
   .rowlabel { min-width: 100%; }
 }

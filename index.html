@@ -16,12 +16,26 @@
   <hr>
 
   <section class="card">
+    <div class="practice" id="practice">
+    <div class="question">
     <div class="prompt" id="prompt">&nbsp;</div>
     <form id="answer-form" autocomplete="off">
       <input id="answer" type="text" autocomplete="off" autocorrect="off"
              autocapitalize="off" spellcheck="false" aria-label="romanization">
     </form>
     <div class="reveal" id="reveal">&nbsp;</div>
+    </div>
+    <aside class="tone-guide" id="tone-guide" aria-labelledby="tone-guide-title" hidden>
+      <h2 id="tone-guide-title">Tone guide</h2>
+      <ul>
+        <li><b>1 · mā / ma1</b> — high, level</li>
+        <li><b>2 · má / ma2</b> — rising</li>
+        <li><b>3 · mǎ / ma3</b> — dipping, then rising</li>
+        <li><b>4 · mà / ma4</b> — falling</li>
+        <li><b>0 or 5 · ma / ma0 / ma5</b> — neutral</li>
+      </ul>
+    </aside>
+    </div>
     <div class="meta">
       <span id="score">0/0</span>
       <span class="sep" aria-hidden="true">·</span>
